@@ -1,0 +1,10 @@
+<div style="margin-top: 5%;margin-left: 40%;width: 15%;">
+  <h3>Create New Category</h3>
+  <%= form_tag("/categories", method: "post") do %>
+    <%= label_tag(:name, "Name") %>
+    <%= text_field_tag(:name) %>
+    <%= label_tag(:description, "Description") %>
+    <%= text_field_tag(:description) %>
+    <%= submit_tag("Create") %>
+  <% end %>
+</div>

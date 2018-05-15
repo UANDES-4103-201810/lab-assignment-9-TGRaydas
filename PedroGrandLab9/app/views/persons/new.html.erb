@@ -1,0 +1,14 @@
+<%= form_tag("/persons", method: "post") do %>
+  <%= label_tag(:name, "Name") %>
+  <%= text_field_tag(:name) %>
+  <%= label_tag(:last_name, "Last Name") %>
+  <%= text_field_tag(:last_name) %>
+  <%= label_tag(:bd, "Birth Date") %>
+  <%= date_field_tag(:bd) %>
+  <%= label_tag(:des, "Description") %>
+  <%= text_field_tag(:des) %>
+  <%= check_box_tag(:actor) %>
+  <%= label_tag(:actor, "Actor") %>
+  <%= check_box_tag(:director) %>
+  <%= label_tag(:director, "Director") %>
+<% end %>

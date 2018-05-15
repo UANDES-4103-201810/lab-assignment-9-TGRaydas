@@ -1,0 +1,27 @@
+<div style="margin-top: 5%;margin-left: 40%;width: 15%;">
+  <h3>Create New Movie</h3>
+  <%= form_tag("/new_movie", method: "post") do %>
+    <%= label_tag(:title, "Title") %>
+    <%= text_field_tag(:title) %>
+    <%= label_tag(:description, "Description") %>
+    <%= text_field_tag(:description) %>
+    <%= label_tag(:duration, "Duration in Minutes") %>
+    <%= text_field_tag(:duration) %>
+    <%= label_tag(:release, "Release Date") %>
+    <%= datetime_field_tag(:release) %>
+    <%= label_tag(:director, "Director") %>
+    <%= select_tag(:director, options_for_select(@all_directors), style:"width:100%;border-radius:5px;") %>
+    <%= label_tag(:street, "Address Street") %>
+    <%= text_field_tag(:street) %>
+    <div style="width: 100%">
+      <%= label_tag(:apartment, "Apartment") %>
+      <%= check_box_tag(:apartment) %>
+    </div>
+    <%= label_tag(:add_des, "Address Description") %>
+    <%= text_field_tag(:add_des) %>
+    <%= label_tag(:zipcode, "Address ZipCode") %>
+    <%= text_field_tag(:zipcode) %>
+
+    <%= submit_tag("Create") %>
+  <% end %>
+</div>
