@@ -5,7 +5,7 @@ class CreateAddresses < ActiveRecord::Migration[5.1]
       t.boolean :apartment
       t.string :description
       t.string :zipcode
-
+      t.references :movie
       t.timestamps
     end
   end

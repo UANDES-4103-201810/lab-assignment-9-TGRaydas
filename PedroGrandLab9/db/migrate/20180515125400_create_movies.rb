@@ -6,8 +6,6 @@ class CreateMovies < ActiveRecord::Migration[5.1]
       t.integer :duration
       t.references :director
       t.timestamp :release_date
-      t.references :address
-
       t.timestamps
     end
   end

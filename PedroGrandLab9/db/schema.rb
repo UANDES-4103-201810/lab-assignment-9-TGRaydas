@@ -36,8 +36,10 @@ ActiveRecord::Schema.define(version: 20180515170543) do
     t.boolean "apartment"
     t.string "description"
     t.string "zipcode"
+    t.integer "movie_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["movie_id"], name: "index_addresses_on_movie_id"
   end
 
   create_table "categories", force: :cascade do |t|
@@ -71,10 +73,8 @@ ActiveRecord::Schema.define(version: 20180515170543) do
     t.integer "duration"
     t.integer "director_id"
     t.datetime "release_date"
-    t.integer "address_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["address_id"], name: "index_movies_on_address_id"
     t.index ["director_id"], name: "index_movies_on_director_id"
   end
 

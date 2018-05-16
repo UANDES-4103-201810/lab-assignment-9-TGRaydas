@@ -34,5 +34,14 @@ class PersonsController < ApplicationController
       redirect_to '/persons?q=director'
     end
   end
-
+  def new_actor
+    actor = JSON.parse params[:actor]
+    name = actor["name"]
+    last_name = actor["last_name"]
+    description = actor["description"]
+    birth_date = Date.parse(actor["birth_date"])
+    new_actor = Actor.create(first_name:actor["name"], last_name:actor["last_name"],
+                             description: actor["description"], birth_date: Date.parse(actor["birth_date"]))
+    render :json => new_actor.id
+  end
 end

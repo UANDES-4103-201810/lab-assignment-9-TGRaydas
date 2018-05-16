@@ -8,5 +8,6 @@ Rails.application.routes.draw do
   get '/movies', to: "movies#index"
   get '/new_movie', to: "movies#new"
   post '/movies', to: "movies#create"
+  post '/create_actor', to: "persons#new_actor"
 
 end

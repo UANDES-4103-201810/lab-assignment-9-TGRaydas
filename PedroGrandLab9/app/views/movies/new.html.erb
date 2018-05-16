@@ -1,27 +1,68 @@
-<div style="margin-top: 5%;margin-left: 40%;width: 15%;">
+<div style="margin-top: 5%;margin-left: 40%;width: 20%;">
   <h3>Create New Movie</h3>
-  <%= form_tag("/new_movie", method: "post") do %>
-    <%= label_tag(:title, "Title") %>
-    <%= text_field_tag(:title) %>
+  <%= form_for @movie, url: "/movies", method:"post" do |m| %>
+    <%= label_tag("Title") %>
+    <%= m.text_field :title %>
     <%= label_tag(:description, "Description") %>
-    <%= text_field_tag(:description) %>
+    <%= m.text_field(:description) %>
     <%= label_tag(:duration, "Duration in Minutes") %>
-    <%= text_field_tag(:duration) %>
-    <%= label_tag(:release, "Release Date") %>
-    <%= datetime_field_tag(:release) %>
-    <%= label_tag(:director, "Director") %>
-    <%= select_tag(:director, options_for_select(@all_directors), style:"width:100%;border-radius:5px;") %>
-    <%= label_tag(:street, "Address Street") %>
-    <%= text_field_tag(:street) %>
-    <div style="width: 100%">
-      <%= label_tag(:apartment, "Apartment") %>
-      <%= check_box_tag(:apartment) %>
+    <%= m.text_field(:duration) %>
+    <%= label_tag("Release Date") %>
+    <%= m.datetime_field(:release_date) %>
+    <%= label_tag("Director") %>
+    <%= m.select(:director_id, options_for_select(@all_directors), style:"width:100%;border-radius:5px;") %><br/>
+    <%= label_tag("Actors  ") %><span style="font-size: 12px">(Please use shift and click for multiple select)</span>
+    <%= select_tag(:actors, options_for_select(@all_actors), multiple:true, style: "width: 100%;height: 100px;") %><br/>
+    <%= fields_for(@movie.address) do |add| %>
+    <%= label_tag("Create Actor") %>
+    <div style="width: 90%; margin-left: 5%;">
+      <label>Name</label>
+      <input id="actor_name">
+      <label>Last Name</label>
+      <input id="actor_last_name">
+      <label>Birth Date</label>
+      <input type="date" id="actor_birth_date">
+      <label>Description</label>
+      <input id="actor_description">
+      <input id="create_actor" value="Create Actor" style="width: 40%;margin-left: 32%" type="button">
     </div>
-    <%= label_tag(:add_des, "Address Description") %>
-    <%= text_field_tag(:add_des) %>
-    <%= label_tag(:zipcode, "Address ZipCode") %>
-    <%= text_field_tag(:zipcode) %>
-
+    <%= label_tag("Address Street") %>
+    <%= add.text_field :street %>
+    <div style="width: 100%">
+      <%= label_tag("Apartment") %>
+      <%= add.check_box(:apartment) %>
+    </div>
+    <%= label_tag("Address Description") %>
+    <%= add.text_field(:description) %>
+    <%= label_tag("Address ZipCode") %>
+    <%= add.text_field(:zipcode) %>
+    <% end %>
     <%= submit_tag("Create") %>
   <% end %>
 </div>
+<script>
+function CreateActor(){
+    $("#create_actor").click(function () {
+        var name = $("#actor_name").val();
+        var last_name = $("#actor_last_name").val();
+        var birth_date = $("#actor_birth_date").val();
+        var description = $("#actor_description").val();
+        var data = {"name": name, "last_name": last_name, "birth_date": birth_date, "description": description};
+        $.ajax({
+           url: '/create_actor',
+           dataType: 'json',
+           type: 'post',
+           data: {actor: JSON.stringify(data)},
+           success: function (info) {
+               $("#actors").append("<option value=" + info.toString() + ">" + name + " " + last_name + "</option>");
+           },
+           error: function () {
+
+           }
+        });
+    })
+}
+$(document).ready(function () {
+   CreateActor();
+});
+</script>
