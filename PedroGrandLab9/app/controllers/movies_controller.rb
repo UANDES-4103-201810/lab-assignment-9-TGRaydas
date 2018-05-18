@@ -4,12 +4,12 @@ class MoviesController < ApplicationController
   end
   def new
     @movie = Movie.new
-    @all_directors = []
+    @all_directors = [["", 0]]
     Director.all.each do |dir|
       director = [dir.first_name + " " +dir.last_name, dir.id]
       @all_directors.push(director)
     end
-    @all_actors = []
+    @all_actors = [["", 0]]
     Actor.all.each do |dir|
       actor = [dir.first_name + " " +dir.last_name, dir.id]
       @all_actors.push(actor)
@@ -27,10 +27,12 @@ class MoviesController < ApplicationController
     zipcode = params[:zipcode]
     movie = Movie.create(title:title, description:description, duration:duration, director_id:director,
                          release_date:release)
-    actors = params[:actors]
+    actors = params[:actors_id_field].split(",")
     actors.each do |act|
       Actormovie.create(actor_id: act, movie_id: movie.id)
     end
     address = Address.create(street:street, apartment:apartment, description:address_des, zipcode:zipcode, movie_id:movie.id)
+    flash[:notice] = "The movie was created!"
+    redirect_to '/movies/new'
   end
 end

@@ -1,4 +1,5 @@
 <div style="margin-top: 5%;margin-left: 40%;width: 20%;">
+  <div style="color:green;"><%= flash[:notice] %></div>
   <h3>Create New Movie</h3>
   <%= form_for @movie, url: "/movies", method:"post" do |m| %>
     <%= label_tag("Title") %>
@@ -11,8 +12,15 @@
     <%= m.datetime_field(:release_date) %>
     <%= label_tag("Director") %>
     <%= m.select(:director_id, options_for_select(@all_directors), style:"width:100%;border-radius:5px;") %><br/>
-    <%= label_tag("Actors  ") %><span style="font-size: 12px">(Please use shift and click for multiple select)</span>
-    <%= select_tag(:actors, options_for_select(@all_actors), multiple:true, style: "width: 100%;height: 100px;") %><br/>
+    <%= label_tag("Actors  ") %>
+    <%= text_field_tag(:actors_id_field, " ", hidden:true) %>
+    <table style="width: 100%;" id="actor_table">
+      <tr>
+        <th style="width: 75%;">Name</th>
+        <th style="width: 25%;">Delete</th>
+      </tr>
+    </table>
+    <%= select_tag(:actors, options_for_select(@all_actors), style: "width: 100%;") %><br/>
     <%= fields_for(@movie.address) do |add| %>
     <%= label_tag("Create Actor") %>
     <div style="width: 90%; margin-left: 5%;">
@@ -37,10 +45,41 @@
     <%= label_tag("Address ZipCode") %>
     <%= add.text_field(:zipcode) %>
     <% end %>
-    <%= submit_tag("Create") %>
+    <%= submit_tag("Create", :id => "create_form") %>
   <% end %>
 </div>
 <script>
+function changeActorIdInput(actors_id) {
+    var input_string = "";
+    for (var i = 0; i < actors_id.length; i++){
+        input_string += actors_id[i] + ",";
+    }
+    input_string = input_string.slice(0, -1);
+    $("#actors_id_field").val(input_string);
+}
+function manageActorTable() {
+    var actors_id = [];
+    var counter = 0;
+    $("#actors").change(function(){
+        var id = $("#actors option:selected").val();
+        if (!(actors_id.includes(id)) && id != "0") {
+            var name = $("#actors option:selected").text();
+            var row = "<tr><td>" + name + "</td><td style='text-align: center'><input data=" + id + " id='delete_button"+ counter.toString() +"' style='width:30%;background:red' type=button></td></tr>";
+            $("#actor_table").append(row);
+            actors_id.push(id);
+            changeActorIdInput(actors_id);
+            counter += 1;
+        }
+        $("[id^=delete_button]").click(function () {
+            var id = $(this).attr("data");
+            if (actors_id.includes(id)) {
+                actors_id.splice(actors_id.indexOf(id.toString()), 1);
+            }
+            changeActorIdInput(actors_id);
+            $(this).closest("tr").remove();
+        });
+    });
+}  
 function CreateActor(){
     $("#create_actor").click(function () {
         var name = $("#actor_name").val();
@@ -64,5 +103,6 @@ function CreateActor(){
 }
 $(document).ready(function () {
    CreateActor();
+   manageActorTable();
 });
 </script>
